@@ -5,11 +5,14 @@ const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {merge} = require("webpack-merge");
 
-const devDir = Path.join(__dirname, "dev");
-const rootPath = Path.resolve(__dirname, "../../../..");
+//TODO?!
+const wd = Path.join(__dirname, "../../..");
+
+const devDir = Path.join(wd, "dev");
+const rootPath = Path.resolve(wd, "../../../..");
 const assetsDir = Path.join(rootPath, "assets");
 
-export function dev({sbtProjectName, terraformModuleName}) {
+function dev({sbtProjectName, terraformModuleName}) {
   const terraformServeDir = Path.join(rootPath, `../terraform/.terraform/modules/${terraformModuleName}/serve`);
   const staticCopyFiles = [
     `${sbtProjectName}-fastopt-loader.js`,
@@ -17,7 +20,7 @@ export function dev({sbtProjectName, terraformModuleName}) {
     `${sbtProjectName}-fastopt.js.map`,
   ];
 
-  return merge(require("./scalajs.webpack.config"), {
+  return merge(require(Path.resolve(wd, "scalajs.webpack.config")), {
     plugins: [
       new HtmlWebpackPlugin({
         template: Path.resolve(rootPath, "src/main/html/index.html"),
@@ -57,3 +60,5 @@ export function dev({sbtProjectName, terraformModuleName}) {
     output: {path: devDir},
   })
 };
+
+module.exports = {dev}

@@ -8,14 +8,17 @@ const TerserPlugin = require("terser-webpack-plugin");
 const SriPlugin = require("webpack-subresource-integrity");
 const {merge} = require("webpack-merge");
 
-const rootPath = Path.resolve(__dirname, "../../../..");
-const distDir = Path.join(__dirname, "dist");
+//TODO?!
+const wd = Path.join(__dirname, "../../..");
+
+const rootPath = Path.resolve(wd, "../../../..");
+const distDir = Path.join(wd, "dist");
 const assetsDir = Path.join(rootPath, "assets");
 
-export function prod() {
+function prod() {
   process.env.NODE_ENV = "production";
 
-  return merge(require("./scalajs.webpack.config"), {
+  return merge(require(Path.resolve(wd, "scalajs.webpack.config")), {
     mode: "production",
     plugins: [
       new CleanPlugin(distDir),
@@ -54,3 +57,5 @@ export function prod() {
     },
   });
 }
+
+module.exports = {prod}

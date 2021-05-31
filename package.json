@@ -5,6 +5,7 @@
   "license": "MIT",
   "repository": "fun-stack-org/fun-pack",
   "author": "fun",
+  "main": "src/index.js",
   "files": [
     "src"
   ],
