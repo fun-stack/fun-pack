@@ -20,7 +20,7 @@ export function dev({sbtProjectName, terraformModuleName}) {
   return merge(require("./scalajs.webpack.config"), {
     plugins: [
       new HtmlWebpackPlugin({
-        template: Path.resolve(rootPath, "src/main/resources/index.html"),
+        template: Path.resolve(rootPath, "src/main/html/index.html"),
       }),
       new CleanPlugin(devDir),
       new CopyPlugin({

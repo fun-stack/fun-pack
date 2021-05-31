@@ -20,7 +20,7 @@ export function prod() {
     plugins: [
       new CleanPlugin(distDir),
       new HtmlWebpackPlugin({
-        template: Path.resolve(rootPath, "src/main/resources/index.html"),
+        template: Path.resolve(rootPath, "src/main/html/index.html"),
       }),
       new CopyPlugin({
         patterns: [{from: "*", context: assetsDir}],
