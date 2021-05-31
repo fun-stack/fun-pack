@@ -1,4 +1,5 @@
 const Path = require("path");
+const glob = require("glob")
 const CopyPlugin = require("copy-webpack-plugin");
 const CleanPlugin = require("clean-webpack-plugin");
 const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
@@ -12,13 +13,13 @@ const devDir = Path.join(wd, "dev");
 const rootPath = Path.resolve(wd, "../../../..");
 const assetsDir = Path.join(rootPath, "assets");
 
-function dev({sbtProjectName, terraformModuleName}) {
-  const terraformServeDir = Path.join(rootPath, `../terraform/.terraform/modules/${terraformModuleName}/serve`);
+function dev() {
+  const terraformServeDirs = glob.sync(Path.join(rootPath, `../terraform/.terraform/modules/*/serve`));
   const staticCopyFiles = [
-    `${sbtProjectName}-fastopt-loader.js`,
-    `${sbtProjectName}-fastopt.js`,
-    `${sbtProjectName}-fastopt.js.map`,
-  ];
+    glob.sync(Path.join(wd, "*-fastopt-loader.js")),
+    glob.sync(Path.join(wd, "*-fastopt.js")),
+    glob.sync(Path.join(wd, "*-fastopt.js.map"))
+  ].flat().map(path => Path.basename(path));
 
   return merge(require(Path.resolve(wd, "scalajs.webpack.config")), {
     plugins: [
@@ -44,7 +45,7 @@ function dev({sbtProjectName, terraformModuleName}) {
       ],
     },
     devServer: {
-      contentBase: [devDir, assetsDir, terraformServeDir],
+      contentBase: [devDir, assetsDir].concat(terraformServeDirs),
       allowedHosts: [".localhost"],
       disableHostCheck: false,
       compress: false,
