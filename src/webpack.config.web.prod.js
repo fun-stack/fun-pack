@@ -58,4 +58,4 @@ function prod() {
   });
 }
 
-module.exports = {prod}
+module.exports = {webProd: prod};

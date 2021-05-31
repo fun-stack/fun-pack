@@ -61,4 +61,4 @@ function dev({sbtProjectName, terraformModuleName}) {
   })
 };
 
-module.exports = {dev}
+module.exports = {webDev: dev};

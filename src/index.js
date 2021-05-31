@@ -1,4 +1,5 @@
-const {dev} = require("./webpack.config.dev");
-const {prod} = require("./webpack.config.prod");
+const {webDev} = require("./webpack.config.web.dev");
+const {webProd} = require("./webpack.config.web.prod");
+const {lambdaProd} = require("./webpack.config.lambda.prod");
 
-module.exports = {dev, prod};
+module.exports = {webDev, webProd, lambdaProd};
