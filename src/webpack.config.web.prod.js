@@ -26,7 +26,7 @@ function prod() {
         template: Path.resolve(rootPath, "src/main/html/index.html"),
       }),
       new CopyPlugin({
-        patterns: [{from: "*", context: assetsDir}],
+        patterns: [{ from: "**/*", context: assetsDir }],
       }),
       new MiniCssExtractPlugin({
         filename: "main-[contenthash]-hashed.css",
