@@ -14,7 +14,7 @@ const rootPath = Path.resolve(wd, "../../../..");
 const assetsDir = Path.join(rootPath, "assets");
 
 function dev(extraWatchDirsArgs) {
-  const extraWatchDirs = (extraWatchDirsArgs || []).map(path => Path.join(wd, path));
+  const extraWatchDirs = (extraWatchDirsArgs || []).map(path => Path.join(rootPath, path));
   const staticCopyFiles = [
     glob.sync(Path.join(wd, "*-fastopt-loader.js")),
     glob.sync(Path.join(wd, "*-fastopt.js")),
