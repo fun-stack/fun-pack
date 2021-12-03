@@ -13,8 +13,8 @@ const devDir = Path.join(wd, "dev");
 const rootPath = Path.resolve(wd, "../../../..");
 const assetsDir = Path.join(rootPath, "assets");
 
-function dev() {
-  const terraformServeDirs = glob.sync(Path.join(rootPath, `../terraform/.terraform/modules/*/serve`));
+function dev(extraWatchDirsArgs) {
+  const extraWatchDirs = (extraWatchDirsArgs || []).map(path => Path.join(wd, path));
   const staticCopyFiles = [
     glob.sync(Path.join(wd, "*-fastopt-loader.js")),
     glob.sync(Path.join(wd, "*-fastopt.js")),
@@ -45,7 +45,7 @@ function dev() {
       ],
     },
     devServer: {
-      contentBase: [devDir, assetsDir].concat(terraformServeDirs),
+      contentBase: [devDir, assetsDir].concat(extraWatchDirs),
       allowedHosts: [".localhost"],
       disableHostCheck: false,
       compress: false,
