@@ -1,10 +1,14 @@
 {
   "name": "fun-pack",
   "version": "0.1.0",
-  "description": "Have fun",
+  "description": "A webpack plugin to use with scalajs projects",
   "license": "MIT",
-  "repository": "fun-stack-org/fun-pack",
-  "author": "fun",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fun-stack/fun-pack.git"
+  },
+  "homepage": "https://github.com/fun-stack/fun-pack",
+  "author": "cornerman",
   "main": "src/index.js",
   "files": [
     "src"
