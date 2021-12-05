@@ -1,4 +1,5 @@
 const Path = require("path");
+const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 const CleanPlugin = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -13,20 +14,33 @@ const wd = Path.join(__dirname, "../../..");
 
 const rootPath = Path.resolve(wd, "../../../..");
 const distDir = Path.join(wd, "dist");
-const assetsDir = Path.join(rootPath, "assets");
 
-function prod() {
+function prod(argsRaw) {
+  const args = Object.assign({
+    indexHtml: "src/main/html/index.html",
+    assetsDir: "assets"
+  }, argsRaw);
+
+  const indexHtml = Path.resolve(rootPath, args.indexHtml);
+  const assetsDir = Path.join(rootPath, args.assetsDir);
+
   process.env.NODE_ENV = "production";
 
   return merge(require(Path.resolve(wd, "scalajs.webpack.config")), {
     mode: "production",
+    resolve: {
+      modules: [rootPath, Path.join(wd, "node_modules")],
+    },
     plugins: [
+      new webpack.DefinePlugin({
+        PRODUCTION: JSON.stringify(true),
+      }),
       new CleanPlugin(distDir),
       new HtmlWebpackPlugin({
-        template: Path.resolve(rootPath, "src/main/html/index.html"),
+        template: indexHtml,
       }),
       new CopyPlugin({
-        patterns: [{ from: "**/*", context: assetsDir }],
+        patterns: [{from: "**/*", context: assetsDir}],
       }),
       new MiniCssExtractPlugin({
         filename: "main-[contenthash]-hashed.css",
