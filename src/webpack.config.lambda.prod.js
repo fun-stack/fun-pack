@@ -16,7 +16,7 @@ function prod() {
   return merge(require(Path.resolve(wd, "scalajs.webpack.config")), {
     mode: "production",
     resolve: {
-      modules: [rootPath, Path.join(wd, "node_modules")],
+      modules: [rootPath, wd, Path.join(wd, "node_modules")],
     },
     plugins: [
       new CleanPlugin(distDir),
