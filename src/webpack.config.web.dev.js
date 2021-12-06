@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {merge} = require("webpack-merge");
 
 //TODO?!
-const wd = Path.join(__dirname, "../../..");
+const wd = Path.join(__dirname, "../../../..");
 
 const devDir = Path.join(wd, "dev");
 const rootPath = Path.resolve(wd, "../../../..");
