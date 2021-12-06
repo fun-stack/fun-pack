@@ -17,6 +17,7 @@ function prod() {
     mode: "production",
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
+      extensins: ['...']
     },
     plugins: [
       new CleanPlugin(distDir),

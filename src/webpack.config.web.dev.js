@@ -33,6 +33,7 @@ function dev(argsRaw) {
   return merge(require(Path.resolve(wd, "scalajs.webpack.config")), {
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
+      extensins: ['...']
     },
     plugins: [
       new webpack.DefinePlugin({
