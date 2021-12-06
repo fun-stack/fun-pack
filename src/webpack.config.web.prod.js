@@ -30,7 +30,6 @@ function prod(argsRaw) {
     mode: "production",
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
-      extensins: ['...']
     },
     plugins: [
       new webpack.DefinePlugin({
