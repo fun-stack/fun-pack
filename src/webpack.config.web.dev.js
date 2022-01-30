@@ -9,9 +9,11 @@ const {merge} = require("webpack-merge");
 
 //TODO?!
 const wd = Path.join(__dirname, "../../../..");
+process.chdir(wd);
 
-const devDir = Path.join(wd, "dev");
 const rootPath = Path.resolve(wd, "../../../..");
+const distDirRelative = "dev";
+const distDir = Path.join(wd, distDirRelative);
 
 function dev(argsRaw) {
   const args = Object.assign({
@@ -46,7 +48,7 @@ function dev(argsRaw) {
       new webpack.DefinePlugin({
         PRODUCTION: JSON.stringify(false),
       }),
-      new CleanPlugin(devDir),
+      new CleanPlugin(distDirRelative),
       new HtmlWebpackPlugin({
         template: indexHtml,
       }),
@@ -68,7 +70,7 @@ function dev(argsRaw) {
       ],
     },
     devServer: {
-      contentBase: [devDir, assetsDir].concat(extraWatchDirs).concat(extraStaticDirs.map(x => x.path)),
+      contentBase: [distDir, assetsDir].concat(extraWatchDirs).concat(extraStaticDirs.map(x => x.path)),
       allowedHosts: [".localhost"],
       disableHostCheck: false,
       compress: false,
@@ -90,7 +92,7 @@ function dev(argsRaw) {
       hotOnly: false,
       inline: true,
     },
-    output: {path: devDir},
+    output: {path: distDir},
   })
 }
 

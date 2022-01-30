@@ -11,9 +11,11 @@ const {merge} = require("webpack-merge");
 
 //TODO?!
 const wd = Path.join(__dirname, "../../../..");
+process.chdir(wd);
 
 const rootPath = Path.resolve(wd, "../../../..");
-const distDir = Path.join(wd, "dist");
+const distDirRelative = "dist";
+const distDir = Path.join(wd, distDirRelative);
 
 function prod(argsRaw) {
   const args = Object.assign({
@@ -35,7 +37,7 @@ function prod(argsRaw) {
       new webpack.DefinePlugin({
         PRODUCTION: JSON.stringify(true),
       }),
-      new CleanPlugin(distDir),
+      new CleanPlugin(distDirRelative),
       new HtmlWebpackPlugin({
         template: indexHtml,
       }),
