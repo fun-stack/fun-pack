@@ -1,3 +1,4 @@
+const {patchSourceMap} = require("./webpack.sourcemap.js");
 const Path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
@@ -25,7 +26,7 @@ function prod(argsRaw) {
 
   process.env.NODE_ENV = "production";
 
-  return merge(require(Path.resolve(wd, "scalajs.webpack.config")), {
+  return merge(patchSourceMap(require(Path.resolve(wd, "scalajs.webpack.config"))), {
     mode: "production",
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],

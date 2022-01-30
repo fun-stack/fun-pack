@@ -1,3 +1,4 @@
+const {patchSourceMap} = require("./webpack.sourcemap.js");
 const Path = require("path");
 const FsPlugin = require("fs-webpack-plugin");
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -9,7 +10,7 @@ const rootPath = Path.resolve(wd, "../../../..");
 const distDir = Path.join(wd, "dev");
 
 function dev() {
-  return merge(require(Path.resolve(wd, "scalajs.webpack.config")), {
+  return merge(patchSourceMap(require(Path.resolve(wd, "scalajs.webpack.config"))), {
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
     },

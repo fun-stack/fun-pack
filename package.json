@@ -29,6 +29,7 @@
     "postcss": "8.2.9",
     "postcss-loader": "4.2.0",
     "postcss-nesting": "7.0.1",
+    "@fun-stack/source-map-loader-no-warn": "1.1.4",
     "style-loader": "2.0.0",
     "terser-webpack-plugin": "4.2.3",
     "webpack-dev-server": "3.11.2",

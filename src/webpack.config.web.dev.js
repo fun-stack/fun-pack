@@ -1,3 +1,4 @@
+const {patchSourceMap} = require("./webpack.sourcemap.js");
 const Path = require("path");
 const glob = require("glob")
 const webpack = require("webpack");
@@ -38,7 +39,7 @@ function dev(argsRaw) {
     glob.sync(Path.join(wd, "*-fastopt.js.map"))
   ].flat().map(path => Path.basename(path));
 
-  return merge(require(Path.resolve(wd, "scalajs.webpack.config")), {
+  return merge(patchSourceMap(require(Path.resolve(wd, "scalajs.webpack.config"))), {
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
     },

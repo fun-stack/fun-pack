@@ -1,3 +1,4 @@
+const {patchSourceMap} = require("./webpack.sourcemap.js");
 const Path = require("path");
 const FsPlugin = require("fs-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
@@ -12,7 +13,7 @@ const distDir = Path.join(wd, "dist");
 function prod() {
   process.env.NODE_ENV = "production";
 
-  return merge(require(Path.resolve(wd, "scalajs.webpack.config")), {
+  return merge(patchSourceMap(require(Path.resolve(wd, "scalajs.webpack.config"))), {
     mode: "production",
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
