@@ -1,7 +1,7 @@
 const Path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
-const CleanPlugin = require("clean-webpack-plugin");
+const CleanPlugin = require("webpack-cleanup-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
@@ -11,11 +11,9 @@ const {merge} = require("webpack-merge");
 
 //TODO?!
 const wd = Path.join(__dirname, "../../../..");
-process.chdir(wd);
 
 const rootPath = Path.resolve(wd, "../../../..");
-const distDirRelative = "dist";
-const distDir = Path.join(wd, distDirRelative);
+const distDir = Path.join(wd, "dist");
 
 function prod(argsRaw) {
   const args = Object.assign({
@@ -37,7 +35,7 @@ function prod(argsRaw) {
       new webpack.DefinePlugin({
         PRODUCTION: JSON.stringify(true),
       }),
-      new CleanPlugin(distDirRelative),
+      new CleanPlugin(),
       new HtmlWebpackPlugin({
         template: indexHtml,
       }),

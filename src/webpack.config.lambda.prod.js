@@ -1,16 +1,14 @@
 const Path = require("path");
-const CleanPlugin = require("clean-webpack-plugin");
+const CleanPlugin = require("webpack-cleanup-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const {merge} = require("webpack-merge");
 
 //TODO?!
 const wd = Path.join(__dirname, "../../../..");
-process.chdir(wd);
 
 const rootPath = Path.resolve(wd, "../../../..");
-const distDirRelative = "dist";
-const distDir = Path.join(wd, distDirRelative);
+const distDir = Path.join(wd, "dist");
 
 function prod() {
   process.env.NODE_ENV = "production";
@@ -21,7 +19,7 @@ function prod() {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
     },
     plugins: [
-      new CleanPlugin(distDirRelative),
+      new CleanPlugin(),
       // to analyze bundle size, have a look at these:
       // new BundleAnalyzerPlugin({analyzerMode: "server"}),
       // https://www.npmjs.com/package/source-map-explorer
