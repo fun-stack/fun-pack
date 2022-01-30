@@ -2,11 +2,15 @@
 
 A webpack plugin to use with scalajs projects.
 
+```sh
+npm install @fun-stack/fun-pack
+```
+
 Provides webpack configs for web development (dev and prod) and lambda development (dev and prod).
 
 Web (dev):
 ```javascript
-const {webDev} = require("fun-pack");
+const {webDev} = require("@fun-stack/fun-pack");
 
 module.exports = webDev({
     assetsDir: "assets",
@@ -18,7 +22,7 @@ module.exports = webDev({
 
 Web (prod):
 ```javascript
-const {webProd} = require("fun-pack");
+const {webProd} = require("@fun-stack/fun-pack");
 
 module.exports = webProd({
     assetsDir: "assets",
@@ -28,14 +32,14 @@ module.exports = webProd({
 
 Lambda (dev):
 ```javascript
-const {lambdaDev} = require("fun-pack");
+const {lambdaDev} = require("@fun-stack/fun-pack");
 
 module.exports = lambdaDev();
 ```
 
 Lambda (prod):
 ```javascript
-const {lambdaProd} = require("fun-pack");
+const {lambdaProd} = require("@fun-stack/fun-pack");
 
 module.exports = lambdaProd();
 ```
