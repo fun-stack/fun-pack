@@ -92,6 +92,6 @@ function dev(argsRaw) {
     },
     output: {path: devDir},
   })
-};
+}
 
 module.exports = {webDev: dev};
