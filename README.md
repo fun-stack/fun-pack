@@ -12,6 +12,7 @@ module.exports = webDev({
     assetsDir: "assets",
     indexHtml: "src/main/html/index.html",
     extraWatchDirs: [],
+    extraStaticDirs: []
 });
 ```
 
@@ -23,6 +24,13 @@ module.exports = webProd({
     assetsDir: "assets",
     indexHtml: "src/main/html/index.html",
 });
+```
+
+Lambda (dev):
+```javascript
+const {lambdaDev} = require("fun-pack");
+
+module.exports = lambdaDev();
 ```
 
 Lambda (prod):
