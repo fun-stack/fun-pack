@@ -2,7 +2,7 @@ const {patchSourceMap} = require("./webpack.sourcemap.js");
 const Path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
-const FsPlugin = require("fs-webpack-plugin");
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
@@ -35,10 +35,7 @@ function prod(argsRaw) {
       new webpack.DefinePlugin({
         PRODUCTION: JSON.stringify(true),
       }),
-      new FsPlugin([{
-        type: 'delete',
-        files: distDir
-      }]),
+      new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         template: indexHtml,
       }),

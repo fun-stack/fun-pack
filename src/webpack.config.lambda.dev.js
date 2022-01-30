@@ -1,6 +1,6 @@
 const {patchSourceMap} = require("./webpack.sourcemap.js");
 const Path = require("path");
-const FsPlugin = require("fs-webpack-plugin");
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const {merge} = require("webpack-merge");
 
@@ -15,10 +15,7 @@ function dev() {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
     },
     plugins: [
-      new FsPlugin([{
-        type: 'delete',
-        files: distDir
-      }]),
+      new CleanWebpackPlugin(),
       // to analyze bundle size, have a look at these:
       // new BundleAnalyzerPlugin({analyzerMode: "server"}),
       // https://www.npmjs.com/package/source-map-explorer
