@@ -2,7 +2,7 @@ const Path = require("path");
 const glob = require("glob")
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
-const CleanPlugin = require("webpack-cleanup-plugin");
+const FsPlugin = require("fs-webpack-plugin");
 const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {merge} = require("webpack-merge");
@@ -46,7 +46,10 @@ function dev(argsRaw) {
       new webpack.DefinePlugin({
         PRODUCTION: JSON.stringify(false),
       }),
-      new CleanPlugin(),
+      new FsPlugin([{
+        type: 'delete',
+        files: distDir
+      }]),
       new HtmlWebpackPlugin({
         template: indexHtml,
       }),

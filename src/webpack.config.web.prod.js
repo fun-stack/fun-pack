@@ -1,7 +1,7 @@
 const Path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
-const CleanPlugin = require("webpack-cleanup-plugin");
+const FsPlugin = require("fs-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
@@ -9,8 +9,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const SriPlugin = require("webpack-subresource-integrity");
 const {merge} = require("webpack-merge");
 
-//TODO?!
-const wd = Path.join(__dirname, "../../../..");
+const wd = Path.resolve(Path.dirname(module.parent.parent.filename));
 
 const rootPath = Path.resolve(wd, "../../../..");
 const distDir = Path.join(wd, "dist");
@@ -35,7 +34,10 @@ function prod(argsRaw) {
       new webpack.DefinePlugin({
         PRODUCTION: JSON.stringify(true),
       }),
-      new CleanPlugin(),
+      new FsPlugin([{
+        type: 'delete',
+        files: distDir
+      }]),
       new HtmlWebpackPlugin({
         template: indexHtml,
       }),
