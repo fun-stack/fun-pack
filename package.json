@@ -1,6 +1,6 @@
 {
   "name": "@fun-stack/fun-pack",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A webpack plugin to use with scalajs projects",
   "license": "MIT",
   "repository": {
