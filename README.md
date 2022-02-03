@@ -34,12 +34,16 @@ Lambda (dev):
 ```javascript
 const {lambdaDev} = require("@fun-stack/fun-pack");
 
-module.exports = lambdaDev();
+module.exports = lambdaDev({
+    //assetsDir: "???"
+});
 ```
 
 Lambda (prod):
 ```javascript
 const {lambdaProd} = require("@fun-stack/fun-pack");
 
-module.exports = lambdaProd();
+module.exports = lambdaProd({
+    //assetsDir: "???",
+});
 ```
