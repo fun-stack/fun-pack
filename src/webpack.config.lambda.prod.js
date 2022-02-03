@@ -18,7 +18,7 @@ function prod(argsRaw) {
     assetsDir: null
   }, argsRaw);
 
-  const assetsDir = assetsDir ? Path.join(rootPath, args.assetsDir) : null;
+  const assetsDir = args.assetsDir ? Path.join(rootPath, args.assetsDir) : null;
 
   return merge(patchSourceMap(require(Path.resolve(wd, "scalajs.webpack.config"))), {
     mode: "production",
