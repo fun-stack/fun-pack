@@ -8,8 +8,7 @@ const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {merge} = require("webpack-merge");
 
-//TODO?!
-const wd = Path.join(__dirname, "../../../..");
+const wd = Path.resolve(Path.dirname(module.parent.parent.filename));
 
 const rootPath = Path.resolve(wd, "../../../..");
 const distDir = Path.join(wd, "dev");
