@@ -27,6 +27,7 @@ function prod(argsRaw) {
   process.env.NODE_ENV = "production";
 
   return merge(patchSourceMap(require(Path.resolve(wd, "scalajs.webpack.config"))), {
+    node: false, //disable automatic node polyfills from webpack 4, webpack 5 has this disabled by default.
     mode: "production",
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],

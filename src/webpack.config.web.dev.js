@@ -39,6 +39,7 @@ function dev(argsRaw) {
   ].flat().map(path => Path.basename(path));
 
   return merge(patchSourceMap(require(Path.resolve(wd, "scalajs.webpack.config"))), {
+    node: false, //disable automatic node polyfills from webpack 4, webpack 5 has this disabled by default.
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
     },
