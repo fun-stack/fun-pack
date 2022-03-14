@@ -13,10 +13,10 @@ Web (dev):
 const {webDev} = require("@fun-stack/fun-pack");
 
 module.exports = webDev({
-    assetsDir: "assets",
     indexHtml: "src/main/html/index.html",
-    extraWatchDirs: [],
-    extraStaticDirs: []
+    // assetsDir: "assets",
+    // extraWatchDirs: [],
+    // extraStaticDirs: []
 });
 ```
 
@@ -25,8 +25,8 @@ Web (prod):
 const {webProd} = require("@fun-stack/fun-pack");
 
 module.exports = webProd({
-    assetsDir: "assets",
     indexHtml: "src/main/html/index.html",
+    // assetsDir: "assets",
 });
 ```
 
@@ -35,7 +35,7 @@ Lambda (dev):
 const {lambdaDev} = require("@fun-stack/fun-pack");
 
 module.exports = lambdaDev({
-    //assetsDir: "???"
+    // assetsDir: "assets"
 });
 ```
 
@@ -44,6 +44,6 @@ Lambda (prod):
 const {lambdaProd} = require("@fun-stack/fun-pack");
 
 module.exports = lambdaProd({
-    //assetsDir: "???",
+    // assetsDir: "assets",
 });
 ```

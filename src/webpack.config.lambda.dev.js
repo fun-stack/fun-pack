@@ -23,13 +23,17 @@ function dev(argsRaw) {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      new CopyPlugin({
-        patterns: [{from: "**/*", context: assetsDir}],
-      })
+    ].concat(
+      assetsDir ? [
+        new CopyPlugin({
+          patterns: [{from: "**/*", context: assetsDir}],
+        })
+      ] : []
+    ).concat([
       // to analyze bundle size, have a look at these:
       // new BundleAnalyzerPlugin({analyzerMode: "server"}),
       // https://www.npmjs.com/package/source-map-explorer
-    ],
+    ]),
     optimization: {
       minimize: false,
     },

@@ -17,12 +17,12 @@ const distDir = Path.join(wd, "dist");
 
 function prod(argsRaw) {
   const args = Object.assign({
-    indexHtml: "src/main/html/index.html",
-    assetsDir: "assets"
+    indexHtml: null,
+    assetsDir: null
   }, argsRaw);
 
-  const indexHtml = Path.resolve(rootPath, args.indexHtml);
-  const assetsDir = Path.join(rootPath, args.assetsDir);
+  const indexHtml = args.indexHtml ? Path.resolve(rootPath, args.indexHtml) : null;
+  const assetsDir = args.assetsDir ? Path.join(rootPath, args.assetsDir) : null;
 
   process.env.NODE_ENV = "production";
 
@@ -37,12 +37,19 @@ function prod(argsRaw) {
         PRODUCTION: JSON.stringify(true),
       }),
       new CleanWebpackPlugin(),
-      new HtmlWebpackPlugin({
-        template: indexHtml,
-      }),
-      new CopyPlugin({
-        patterns: [{from: "**/*", context: assetsDir}],
-      }),
+    ].concat(
+      indexHtml ? [
+        new HtmlWebpackPlugin({
+          template: indexHtml
+        })
+      ] : []
+    ).concat(
+      assetsDir ? [
+        new CopyPlugin({
+          patterns: [{from: "**/*", context: assetsDir}],
+        })
+      ] : []
+    ).concat([
       new MiniCssExtractPlugin({
         filename: "main-[contenthash]-hashed.css",
       }),
@@ -50,7 +57,7 @@ function prod(argsRaw) {
         hashFuncNames: ["sha256"],
         enabled: process.env.NODE_ENV === "production",
       }),
-    ],
+    ]),
     module: {
       rules: [
         {

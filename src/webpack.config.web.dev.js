@@ -15,16 +15,16 @@ const distDir = Path.join(wd, "dev");
 
 function dev(argsRaw) {
   const args = Object.assign({
-    indexHtml: "src/main/html/index.html",
-    assetsDir: "assets",
+    indexHtml: null,
+    assetsDir: null,
     extraWatchDirs: [],
     extraStaticDirs: []
   }, argsRaw);
 
-  const indexHtml = Path.resolve(rootPath, args.indexHtml);
-  const assetsDir = Path.join(rootPath, args.assetsDir);
+  const indexHtml = args.indexHtml ? Path.resolve(rootPath, args.indexHtml) : null;
+  const assetsDir = args.assetsDir ? Path.join(rootPath, args.assetsDir) : null;
   const extraWatchDirs = args.extraWatchDirs.map(path => Path.join(rootPath, path));
-  //TODO: switch to webpack dev server 4, then we do not need this rewrites/ignore workaround for static assets.
+  //TODO: switch to webpack dev server 5, then we do not need this rewrites/ignore workaround for static assets.
   const extraStaticDirs = args.extraStaticDirs.map(path => {
     return {
       path: Path.join(rootPath, path),
@@ -48,9 +48,13 @@ function dev(argsRaw) {
         PRODUCTION: JSON.stringify(false),
       }),
       new CleanWebpackPlugin(),
-      new HtmlWebpackPlugin({
-        template: indexHtml,
-      }),
+    ].concat(
+      indexHtml ? [
+        new HtmlWebpackPlugin({
+          template: indexHtml
+        })
+      ] : []
+    ).concat([
       new CopyPlugin({
         patterns: staticCopyFiles.map((f) => {
           return {from: f, context: Path.dirname(f), force: true};
@@ -59,7 +63,7 @@ function dev(argsRaw) {
       new HtmlWebpackTagsPlugin({
         tags: staticCopyFiles.filter((name) => name.endsWith(".js")),
       }),
-    ],
+    ]),
     module: {
       rules: [
         {
@@ -69,7 +73,7 @@ function dev(argsRaw) {
       ],
     },
     devServer: {
-      contentBase: [distDir, assetsDir].concat(extraWatchDirs).concat(extraStaticDirs.map(x => x.path)),
+      contentBase: [distDir].concat(assetsDir ? [assetsDir] : []).concat(extraWatchDirs).concat(extraStaticDirs.map(x => x.path)),
       allowedHosts: [".localhost"],
       disableHostCheck: false,
       compress: false,
