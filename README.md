@@ -1,6 +1,6 @@
 # fun-pack
 
-A webpack plugin to use with scalajs projects.
+A webpack plugin to use with scalajs projects with scalajs-bundler.
 
 ```sh
 npm install @fun-stack/fun-pack
