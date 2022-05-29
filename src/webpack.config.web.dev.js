@@ -1,6 +1,6 @@
-const {patchSourceMap} = require("./webpack.sourcemap.js");
+const {baseConfig} = require("./webpack.base.js");
 const Path = require("path");
-const glob = require("glob")
+const glob = require("glob");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
@@ -10,11 +10,14 @@ const {merge} = require("webpack-merge");
 
 const wd = Path.resolve(Path.dirname(module.parent.parent.filename));
 
-const rootPath = Path.resolve(wd, "../../../..");
+const isScalaJsBundler = wd.includes("scalajs-bundler") && wd.includes("main");
+const relativeCorrection = isScalaJsBundler ? "../../../.." : ".";
+const rootPath = Path.resolve(wd, relativeCorrection);
 const distDir = Path.join(wd, "dev");
 
 function dev(argsRaw) {
   const args = Object.assign({
+    entrypoint: null,
     indexHtml: null,
     assetsDir: null,
     extraWatchDirs: [],
@@ -38,7 +41,7 @@ function dev(argsRaw) {
     glob.sync(Path.join(wd, "*-fastopt.js.map"))
   ].flat().map(path => Path.basename(path));
 
-  return merge(patchSourceMap(require(Path.resolve(wd, "scalajs.webpack.config"))), {
+  return merge(baseConfig(wd, args.entrypoint), {
     node: false, //disable automatic node polyfills from webpack 4, webpack 5 has this disabled by default.
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
@@ -54,12 +57,13 @@ function dev(argsRaw) {
           template: indexHtml
         })
       ] : []
-    ).concat([
-      new CopyPlugin({
+    ).concat(
+      staticCopyFiles.length > 0 ? new CopyPlugin({
         patterns: staticCopyFiles.map((f) => {
           return {from: f, context: Path.dirname(f), force: true};
         }),
-      }),
+      }) : []
+    ).concat([
       new HtmlWebpackTagsPlugin({
         tags: staticCopyFiles.filter((name) => name.endsWith(".js")),
       }),

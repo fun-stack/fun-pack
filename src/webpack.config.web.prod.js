@@ -1,4 +1,4 @@
-const {patchSourceMap} = require("./webpack.sourcemap.js");
+const {baseConfig} = require("./webpack.base.js");
 const Path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
@@ -12,11 +12,14 @@ const {merge} = require("webpack-merge");
 
 const wd = Path.resolve(Path.dirname(module.parent.parent.filename));
 
-const rootPath = Path.resolve(wd, "../../../..");
+const isScalaJsBundler = wd.includes("scalajs-bundler") && wd.includes("main");
+const relativeCorrection = isScalaJsBundler ? "../../../.." : ".";
+const rootPath = Path.resolve(wd, relativeCorrection);
 const distDir = Path.join(wd, "dist");
 
 function prod(argsRaw) {
   const args = Object.assign({
+    entrypoint: null,
     indexHtml: null,
     assetsDir: null
   }, argsRaw);
@@ -26,7 +29,7 @@ function prod(argsRaw) {
 
   process.env.NODE_ENV = "production";
 
-  return merge(patchSourceMap(require(Path.resolve(wd, "scalajs.webpack.config"))), {
+  return merge(baseConfig(wd, args.entrypoint), {
     node: false, //disable automatic node polyfills from webpack 4, webpack 5 has this disabled by default.
     mode: "production",
     resolve: {

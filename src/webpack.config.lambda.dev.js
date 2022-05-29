@@ -1,4 +1,4 @@
-const {patchSourceMap} = require("./webpack.sourcemap.js");
+const {baseConfig} = require("./webpack.base.js");
 const Path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
@@ -7,17 +7,20 @@ const {merge} = require("webpack-merge");
 
 const wd = Path.resolve(Path.dirname(module.parent.parent.filename));
 
-const rootPath = Path.resolve(wd, "../../../..");
+const isScalaJsBundler = wd.includes("scalajs-bundler") && wd.includes("main");
+const relativeCorrection = isScalaJsBundler ? "../../../.." : ".";
+const rootPath = Path.resolve(wd, relativeCorrection);
 const distDir = Path.join(wd, "dev");
 
 function dev(argsRaw) {
   const args = Object.assign({
+    entrypoint: null,
     assetsDir: null
   }, argsRaw);
 
   const assetsDir = args.assetsDir ? Path.join(rootPath, args.assetsDir) : null;
 
-  return merge(patchSourceMap(require(Path.resolve(wd, "scalajs.webpack.config"))), {
+  return merge(baseConfig(wd, args.entrypoint), {
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
     },
