@@ -13,17 +13,18 @@ const wd = Path.resolve(Path.dirname(module.parent.parent.filename));
 const isScalaJsBundler = wd.includes("scalajs-bundler") && wd.includes("main");
 const relativeCorrection = isScalaJsBundler ? "../../../.." : ".";
 const rootPath = Path.resolve(wd, relativeCorrection);
-const distDir = Path.join(wd, "dev");
 
 function dev(argsRaw) {
   const args = Object.assign({
     entrypoint: null,
+    outputDir: "dev",
     indexHtml: null,
     assetsDir: null,
     extraWatchDirs: [],
     extraStaticDirs: []
   }, argsRaw);
 
+  const outputDir = Path.join(wd, args.outputDir);
   const indexHtml = args.indexHtml ? Path.resolve(rootPath, args.indexHtml) : null;
   const assetsDir = args.assetsDir ? Path.join(rootPath, args.assetsDir) : null;
   const extraWatchDirs = args.extraWatchDirs.map(path => Path.join(rootPath, path));
@@ -77,7 +78,7 @@ function dev(argsRaw) {
       ],
     },
     devServer: {
-      contentBase: [distDir].concat(assetsDir ? [assetsDir] : []).concat(extraWatchDirs).concat(extraStaticDirs.map(x => x.path)),
+      contentBase: [outputDir].concat(assetsDir ? [assetsDir] : []).concat(extraWatchDirs).concat(extraStaticDirs.map(x => x.path)),
       allowedHosts: [".localhost"],
       disableHostCheck: false,
       compress: false,
@@ -99,7 +100,7 @@ function dev(argsRaw) {
       hotOnly: false,
       inline: true,
     },
-    output: {path: distDir},
+    output: {path: outputDir},
   })
 }
 

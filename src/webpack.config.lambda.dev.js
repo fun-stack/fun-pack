@@ -10,14 +10,15 @@ const wd = Path.resolve(Path.dirname(module.parent.parent.filename));
 const isScalaJsBundler = wd.includes("scalajs-bundler") && wd.includes("main");
 const relativeCorrection = isScalaJsBundler ? "../../../.." : ".";
 const rootPath = Path.resolve(wd, relativeCorrection);
-const distDir = Path.join(wd, "dev");
 
 function dev(argsRaw) {
   const args = Object.assign({
     entrypoint: null,
+    outputDir: "dev",
     assetsDir: null
   }, argsRaw);
 
+  const outputDir = Path.join(wd, args.outputDir);
   const assetsDir = args.assetsDir ? Path.join(rootPath, args.assetsDir) : null;
 
   return merge(baseConfig(wd, args.entrypoint), {
@@ -42,7 +43,7 @@ function dev(argsRaw) {
     },
     target: 'node',
     output: {
-      path: distDir,
+      path: outputDir,
       filename: "main.js",
       libraryTarget: 'umd'
     },
