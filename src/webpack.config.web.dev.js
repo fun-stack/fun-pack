@@ -27,8 +27,12 @@ function dev(argsRaw) {
   const outputDir = Path.join(wd, args.outputDir);
   const indexHtml = args.indexHtml ? Path.resolve(rootPath, args.indexHtml) : null;
   const assetsDir = args.assetsDir ? Path.join(rootPath, args.assetsDir) : null;
-  const extraWatchDirs = args.extraWatchDirs.map(path => Path.join(rootPath, path));
-  //TODO: switch to webpack dev server 5, then we do not need this rewrites/ignore workaround for static assets.
+  const extraWatchDirs = args.extraWatchDirs.map(path => {
+    return {
+      path: Path.join(rootPath, path),
+      dir: path
+    };
+  });
   const extraStaticDirs = args.extraStaticDirs.map(path => {
     return {
       path: Path.join(rootPath, path),
@@ -78,7 +82,7 @@ function dev(argsRaw) {
       ],
     },
     devServer: {
-      contentBase: [outputDir].concat(assetsDir ? [assetsDir] : []).concat(extraWatchDirs).concat(extraStaticDirs.map(x => x.path)),
+      contentBase: [outputDir].concat(assetsDir ? [assetsDir] : []).concat(extraWatchDirs.map(x => x.path)).concat(extraStaticDirs.map(x => x.path)),
       allowedHosts: [".localhost"],
       disableHostCheck: false,
       compress: false,
@@ -86,8 +90,9 @@ function dev(argsRaw) {
       watchOptions: {
         ignored: (f) => f.endsWith(".tmp") || extraStaticDirs.some(d => f.startsWith(d.path))
       },
+      //TODO: switch to webpack dev server 5, then we do not need this rewrites/ignore workaround for static assets.
       historyApiFallback: {
-        rewrites: extraStaticDirs.map(d => {
+        rewrites: extraWatchDirs.concat(extraStaticDirs).map(d => {
           const regex = new RegExp(`^/${d.dir}/`, '');
           return {
             from: regex,
