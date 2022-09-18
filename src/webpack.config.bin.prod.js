@@ -32,7 +32,7 @@ function prod(argsRaw) {
         raw: true,
       }),
       function () {
-        this.plugin('done', () => fs.chmodSync(fileName, '755'))
+        this.plugin('done', () => fs.chmodSync(Path.join(outputDir, fileName), '755'))
       }
     ],
   });
