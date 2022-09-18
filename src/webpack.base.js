@@ -3,7 +3,7 @@ const Path = require("path");
 const glob = require("glob");
 const {patchSourceMap} = require("./webpack.sourcemap.js");
 
-const scalaJsBundlerConfigFile = "scalajs.webpack.config";
+const scalaJsBundlerConfigFile = "scalajs.webpack.config.js";
 
 function findJsMainFile(workingDir, isProd) {
   const mode = isProd ? "opt" : "fastopt";
