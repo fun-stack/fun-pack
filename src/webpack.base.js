@@ -3,6 +3,12 @@ const Path = require("path");
 const glob = require("glob");
 const {patchSourceMap} = require("./webpack.sourcemap.js");
 
+// Replaces md4 with sha256 to be compatible with recent node versions (16+)
+// https://stackoverflow.com/a/69691525
+const crypto = require("crypto");
+const crypto_orig_createHash = crypto.createHash;
+crypto.createHash = algorithm => crypto_orig_createHash(algorithm == "md4" ? "sha256" : algorithm);
+
 const scalaJsBundlerConfigFile = "scalajs.webpack.config.js";
 
 function findJsMainFile(workingDir, isProd) {
