@@ -11,6 +11,7 @@ function prod(argsRaw) {
   process.env.NODE_ENV = "production";
 
   const args = Object.assign({
+    entrypoint: null,
     fileName: "index.js",
     outputDir: "dist",
   }, argsRaw);

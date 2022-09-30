@@ -22,10 +22,12 @@ Web (dev):
 const {webDev} = require("@fun-stack/fun-pack");
 
 module.exports = webDev({
+    // entrypoint: "entrypoint.js", // not needed with scalajs-bundler
     indexHtml: "src/main/html/index.html",
     // assetsDir: "assets",
     // extraWatchDirs: [],
     // extraStaticDirs: []
+    // outputDir: "dev",
 });
 ```
 
@@ -34,8 +36,10 @@ Web (prod):
 const {webProd} = require("@fun-stack/fun-pack");
 
 module.exports = webProd({
+    // entrypoint: "entrypoint.js", // not needed with scalajs-bundler
     indexHtml: "src/main/html/index.html",
     // assetsDir: "assets",
+    // outputDir: "dist",
 });
 ```
 
@@ -46,7 +50,9 @@ Lambda (dev):
 const {lambdaDev} = require("@fun-stack/fun-pack");
 
 module.exports = lambdaDev({
-    // assetsDir: "assets"
+    // entrypoint: "entrypoint.js", // not needed with scalajs-bundler
+    // assetsDir: "assets",
+    // outputDir: "dev",
 });
 ```
 
@@ -55,7 +61,10 @@ Lambda (prod):
 const {lambdaProd} = require("@fun-stack/fun-pack");
 
 module.exports = lambdaProd({
+    // entrypoint: "entrypoint.js", // not needed with scalajs-bundler
     // assetsDir: "assets",
+    // outputDir: "dist",
+
 });
 ```
 
@@ -66,6 +75,8 @@ Node executable (prod):
 const {binProd} = require("@fun-stack/fun-pack");
 
 module.exports = binProd({
-    // fileName: "index.js",
+    // entrypoint: "entrypoint.js", // not needed with scalajs-bundler
+    // fileName: "output.js",
+    // outputDir: "dist",
 });
 ```
