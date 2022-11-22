@@ -18,7 +18,7 @@ jobs:
 
       - name: Linter
         run: |
-          npm install
+          yarn install
           npx eslint src/*
 
       - name: Publish
