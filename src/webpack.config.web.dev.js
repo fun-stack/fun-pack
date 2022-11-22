@@ -27,18 +27,10 @@ function dev(argsRaw) {
   const outputDir = Path.join(wd, args.outputDir);
   const indexHtml = args.indexHtml ? Path.resolve(rootPath, args.indexHtml) : null;
   const assetsDir = args.assetsDir ? Path.join(rootPath, args.assetsDir) : null;
-  const extraWatchDirs = args.extraWatchDirs.map(path => {
-    return {
-      path: Path.join(rootPath, path),
-      dir: path
-    };
-  });
-  const extraStaticDirs = args.extraStaticDirs.map(path => {
-    return {
-      path: Path.join(rootPath, path),
-      dir: path
-    };
-  });
+  const extraWatchDirs = args.extraWatchDirs.map(path => Path.join(rootPath, path),);
+  const extraStaticDirs = args.extraStaticDirs;
+
+  const allWatchDirs = [outputDir].concat(assetsDir ? [assetsDir] : []).concat(extraWatchDirs);
 
   const staticCopyFiles = [
     glob.sync(Path.join(wd, "*-fastopt-loader.js")),
@@ -47,7 +39,6 @@ function dev(argsRaw) {
   ].flat().map(path => Path.basename(path));
 
   return merge(baseConfig(wd, args.entrypoint), {
-    node: false, //disable automatic node polyfills from webpack 4, webpack 5 has this disabled by default.
     resolve: {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
     },
@@ -82,28 +73,22 @@ function dev(argsRaw) {
       ],
     },
     devServer: {
-      contentBase: [outputDir].concat(assetsDir ? [assetsDir] : []).concat(extraWatchDirs.map(x => x.path)).concat(extraStaticDirs.map(x => x.path)),
       allowedHosts: [".localhost"],
-      disableHostCheck: false,
       compress: false,
-      watchContentBase: true,
-      watchOptions: {
-        ignored: (f) => f.endsWith(".tmp") || extraStaticDirs.some(d => f.startsWith(d.path))
-      },
-      //TODO: switch to webpack dev server 5, then we do not need this rewrites/ignore workaround for static assets.
-      historyApiFallback: {
-        rewrites: extraWatchDirs.concat(extraStaticDirs).map(d => {
-          const regex = new RegExp(`^/${d.dir}/`, '');
+      static: extraStaticDirs.map(dir => {
           return {
-            from: regex,
-            to: context => context.parsedUrl.pathname.replace(regex, '')
+          directory: Path.join(rootPath, dir),
+          publicPath: "/" + dir,
           };
-        })
+      }).concat(allWatchDirs.map(path => {
+        return {
+          directory: path,
+          watch: {
+            ignored: (f) => f.endsWith(".tmp"),
       },
-      // writeToDisk: true,
+        };
+      })),
       hot: false,
-      hotOnly: false,
-      inline: true,
     },
     output: {path: outputDir},
   })

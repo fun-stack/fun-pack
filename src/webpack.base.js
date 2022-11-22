@@ -1,7 +1,7 @@
 const fs = require('fs')
 const Path = require("path");
 const glob = require("glob");
-const {patchSourceMap} = require("./webpack.sourcemap.js");
+const {merge} = require("webpack-merge");
 
 // Replaces md4 with sha256 to be compatible with recent node versions (16+)
 // https://stackoverflow.com/a/69691525
@@ -10,6 +10,20 @@ const crypto_orig_createHash = crypto.createHash;
 crypto.createHash = algorithm => crypto_orig_createHash(algorithm == "md4" ? "sha256" : algorithm);
 
 const scalaJsBundlerConfigFile = "scalajs.webpack.config.js";
+
+const commonBaseConfig = {
+  ignoreWarnings: [
+    {
+      message: /You can limit the size of your bundles by using import\(\) or require.ensure to lazy load some parts of your application/, //https://github.com/scalacenter/scalajs-bundler/issues/423
+    },
+    {
+      message: /This can impact web performance/, // https://github.com/scalacenter/scalajs-bundler/issues/423
+    },
+    {
+      message: /Failed to parse source map/, // sourcemaps
+    },
+  ],
+};
 
 function findJsMainFile(workingDir, isProd) {
   const mode = isProd ? "opt" : "fastopt";
@@ -23,7 +37,7 @@ function findJsMainFile(workingDir, isProd) {
 function baseConfig(workingDir, entrypoint) {
   const path = Path.join(workingDir, scalaJsBundlerConfigFile);
   if (fs.existsSync(path)) {
-    return patchSourceMap(require(path));
+    return merge(commonBaseConfig, require(path));
   }
 
   const isProd = process.env.NODE_ENV === "production";
@@ -33,7 +47,7 @@ function baseConfig(workingDir, entrypoint) {
   const jsEntrypointDirectory = Path.dirname(jsEntrypoint);
   fs.mkdirSync(jsEntrypointDirectory, {recursive: true})
 
-  return {
+  return merge(commonBaseConfig, {
     "entry": {
       "app": [jsEntrypoint]
     },
@@ -49,10 +63,10 @@ function baseConfig(workingDir, entrypoint) {
       "rules": [{
         "test": new RegExp("\\.js$"),
         "enforce": "pre",
-        "use": ["@fun-stack/source-map-loader-no-warn"]
+        "use": ["source-map-loader"]
       }]
     }
-  };
+  });
 }
 
 module.exports = {baseConfig: baseConfig};
