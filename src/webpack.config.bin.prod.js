@@ -32,9 +32,11 @@ function prod(argsRaw) {
         banner: '#!/usr/bin/env -S node --enable-source-maps',
         raw: true,
       }),
-      function () {
-        this.plugin('done', () => fs.chmodSync(Path.join(outputDir, fileName), '755'))
-      }
+      {
+        apply: (compiler) => {
+          compiler.hooks.done.tap('done', () => fs.chmodSync(Path.join(outputDir, fileName), '755'))
+        }
+      },
     ],
   });
 }
