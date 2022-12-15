@@ -76,16 +76,17 @@ function dev(argsRaw) {
       allowedHosts: [".localhost"],
       compress: false,
       static: extraStaticDirs.map(dir => {
-          return {
+        return {
           directory: Path.join(rootPath, dir),
           publicPath: "/" + dir,
-          };
+          watch: false,
+        };
       }).concat(allWatchDirs.map(path => {
         return {
           directory: path,
           watch: {
             ignored: (f) => f.endsWith(".tmp"),
-      },
+          },
         };
       })),
       hot: false,
