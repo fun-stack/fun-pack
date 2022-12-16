@@ -2,6 +2,7 @@ const {baseConfig} = require("./webpack.base.js");
 const Path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
@@ -39,6 +40,7 @@ function prod(argsRaw) {
       new webpack.DefinePlugin({
         PRODUCTION: JSON.stringify(true),
       }),
+      new CleanWebpackPlugin(),
     ].concat(
       indexHtml ? [
         new HtmlWebpackPlugin({
@@ -78,7 +80,6 @@ function prod(argsRaw) {
       path: outputDir,
       filename: "main-[contenthash]-hashed.js",
       crossOriginLoading: "anonymous",
-      clean: true,
     },
   });
 }
