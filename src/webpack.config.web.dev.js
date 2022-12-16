@@ -73,6 +73,11 @@ function dev(argsRaw) {
       ],
     },
     devServer: {
+      devMiddleware: {
+        writeToDisk: (filePath) => {
+          return /\.js$/.test(filePath);
+        },
+      },
       allowedHosts: [".localhost"],
       compress: false,
       static: extraStaticDirs.map(dir => {
