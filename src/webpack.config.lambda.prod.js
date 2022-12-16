@@ -1,7 +1,6 @@
 const {baseConfig} = require("./webpack.base.js");
 const Path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
-const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const {merge} = require("webpack-merge");
@@ -30,7 +29,6 @@ function prod(argsRaw) {
       modules: [rootPath, wd, Path.join(wd, "node_modules")],
     },
     plugins: [
-      new CleanWebpackPlugin(),
     ].concat(
       assetsDir ? [
         new CopyPlugin({
@@ -60,7 +58,8 @@ function prod(argsRaw) {
     output: {
       path: outputDir,
       filename: "main.js",
-      libraryTarget: 'umd'
+      libraryTarget: 'umd',
+      clean: true,
     },
   });
 }

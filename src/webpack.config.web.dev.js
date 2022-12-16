@@ -3,7 +3,6 @@ const Path = require("path");
 const glob = require("glob");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
-const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {merge} = require("webpack-merge");
@@ -46,7 +45,6 @@ function dev(argsRaw) {
       new webpack.DefinePlugin({
         PRODUCTION: JSON.stringify(false),
       }),
-      new CleanWebpackPlugin(),
     ].concat(
       indexHtml ? [
         new HtmlWebpackPlugin({
@@ -91,7 +89,10 @@ function dev(argsRaw) {
       })),
       hot: false,
     },
-    output: {path: outputDir},
+    output: {
+      path: outputDir,
+      clean: true,
+    },
   })
 }
 

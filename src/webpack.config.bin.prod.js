@@ -1,5 +1,4 @@
 const {baseConfig} = require("./webpack.base.js");
-const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const webpack = require('webpack');
 const Path = require('path');
 const fs = require('fs');
@@ -25,9 +24,9 @@ function prod(argsRaw) {
     output: {
       path: outputDir,
       filename: fileName,
+      clean: true,
     },
     plugins: [
-      new CleanWebpackPlugin(),
       new webpack.BannerPlugin({
         banner: '#!/usr/bin/env -S node --enable-source-maps',
         raw: true,
