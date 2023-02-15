@@ -63,7 +63,7 @@ Please use this instead:
   const allStatic = extraStatic.map(obj =>
         Object.assign(
   {}, obj, {
-          directory: obj.directory && Path.join(rootPath, obj.directory),
+          directory: obj.directory && Path.join(rootPath, obj.directory), // make directories relative to current sbt subproject
         })
       ).concat(allWatchDirs.map(path => {
         return {
