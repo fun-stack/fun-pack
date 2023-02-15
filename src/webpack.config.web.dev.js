@@ -20,17 +20,59 @@ function dev(argsRaw) {
     outputDir: "dev",
     indexHtml: null,
     assetsDir: null,
-    extraWatchDirs: [],
-    extraStaticDirs: []
+    extraStatic: [],
   }, argsRaw);
+
+  if (args.extraWatchDirs) {
+    console.error(`You are using the deprecated 'extraWatchDirs' option for fun-pack.
+Please use this instead:
+  extraStatic: [
+    {
+      publicPath: "/my-sub-project",
+      directory: "relative/path/from/sub-project",
+      watch: true,
+    }
+  ]`
+    );
+
+    process.exit(1)
+  }
+
+  if (args.extraStaticDirs) {
+    console.error(`You are using the deprecated 'extraStaticDirs' option for fun-pack.
+Please use this instead:
+  extraStatic: [
+    {
+      publicPath: "/my-sub-project",
+      directory: "relative/path/from/sub-project",
+      watch: false,
+    }
+  ]`
+    );
+
+    process.exit(1)
+  }
 
   const outputDir = Path.join(wd, args.outputDir);
   const indexHtml = args.indexHtml ? Path.resolve(rootPath, args.indexHtml) : null;
   const assetsDir = args.assetsDir ? Path.join(rootPath, args.assetsDir) : null;
-  const extraWatchDirs = args.extraWatchDirs.map(path => Path.join(rootPath, path),);
-  const extraStaticDirs = args.extraStaticDirs;
+  const extraStatic = args.extraStatic;
 
-  const allWatchDirs = [outputDir].concat(assetsDir ? [assetsDir] : []).concat(extraWatchDirs);
+  const allWatchDirs = [outputDir].concat(assetsDir ? [assetsDir] : [])
+
+  const allStatic = extraStatic.map(obj =>
+        Object.assign(
+  {}, obj, {
+          directory: obj.directory && Path.join(rootPath, obj.directory), // make directories relative to current sbt subproject
+        })
+      ).concat(allWatchDirs.map(path => {
+        return {
+          directory: path,
+          watch: {
+            ignored: (f) => f.endsWith(".tmp"),
+          },
+        };
+      }))
 
   const staticCopyFiles = [
     glob.sync(Path.join(wd, "*-fastopt-loader.js")),
@@ -80,20 +122,7 @@ function dev(argsRaw) {
       },
       allowedHosts: [".localhost"],
       compress: false,
-      static: extraStaticDirs.map(dir => {
-        return {
-          directory: Path.join(rootPath, dir),
-          publicPath: "/" + dir,
-          watch: false,
-        };
-      }).concat(allWatchDirs.map(path => {
-        return {
-          directory: path,
-          watch: {
-            ignored: (f) => f.endsWith(".tmp"),
-          },
-        };
-      })),
+      static: allStatic,
       hot: false,
     },
     output: {path: outputDir},

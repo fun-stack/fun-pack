@@ -25,8 +25,7 @@ module.exports = webDev({
     // entrypoint: "entrypoint.js", // not needed with scalajs-bundler
     indexHtml: "src/main/html/index.html",
     // assetsDir: "assets",
-    // extraWatchDirs: [],
-    // extraStaticDirs: []
+    // extraStatic: [],
     // outputDir: "dev",
 });
 ```
